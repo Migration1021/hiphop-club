@@ -74,58 +74,53 @@ function HeroSection() {
       position: "relative", minHeight: "100vh",
       display: "flex", alignItems: "center", justifyContent: "center",
       overflow: "hidden", background: "#000",
+      paddingBottom: 120,
     }}>
-      {/* Static ambient orbs — no blur on mobile, no mouse tracking */}
       <div className="hero-bg" style={{
         position: "absolute", inset: 0,
         opacity: loaded ? 1 : 0, transition: "opacity 2.5s ease",
       }}>
-        <div className="hero-orb hero-orb-1" style={{
+        <div className="hero-orb" style={{
           position: "absolute", width: "70vmax", height: "70vmax", borderRadius: "50%",
           background: "radial-gradient(circle, rgba(255,200,60,.12) 0%, transparent 55%)",
           left: "15%", top: "10%",
         }} />
-        <div className="hero-orb hero-orb-2" style={{
+        <div className="hero-orb" style={{
           position: "absolute", width: "60vmax", height: "60vmax", borderRadius: "50%",
           background: "radial-gradient(circle, rgba(60,120,255,.1) 0%, transparent 55%)",
           right: "10%", bottom: "10%",
         }} />
       </div>
 
+      {/* Bottom fade to smooth transition */}
+      <div style={{
+        position: "absolute", bottom: 0, left: 0, right: 0, height: 200,
+        background: "linear-gradient(to bottom, transparent 0%, #000 100%)",
+        pointerEvents: "none", zIndex: 1,
+      }} />
+
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 24px" }}>
-        <div style={{
+        <div className={loaded ? "anim-fade-up anim-d1" : "anim-hidden"} style={{
           fontSize: "clamp(13px,1.5vw,16px)", fontWeight: 700,
           letterSpacing: ".18em", fontFamily: FONT_EN,
           background: "linear-gradient(90deg,#f7c948,#f0a030,#e07828,#d05a28,#a855f7,#6d5bf7,#2997ff)",
           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          opacity: loaded ? 1 : 0, transform: `translate3d(0,${loaded ? 0 : 20}px,0)`,
-          transition: "all 1.2s cubic-bezier(.25,.1,.25,1) .3s",
         }}>KNUAF HIP-HOP CLUB</div>
 
-        <div style={{
+        <div className={loaded ? "anim-fade-up anim-d2" : "anim-hidden"} style={{
           fontSize: "clamp(110px,24vw,280px)", fontWeight: 900,
           letterSpacing: "-.06em", lineHeight: 1, fontFamily: FONT, color: "#f5f5f7", marginTop: 16,
-          opacity: loaded ? 1 : 0, transform: `translate3d(0,${loaded ? 0 : 35}px,0)`,
-          transition: "all 1.4s cubic-bezier(.25,.1,.25,1) .5s",
         }}>깔</div>
 
-        <div style={{
-          fontSize: "clamp(22px,3.5vw,38px)", fontWeight: 800,
-          letterSpacing: "-.04em", lineHeight: 1.3, fontFamily: FONT, marginTop: 20,
-          opacity: loaded ? 1 : 0, transform: `translate3d(0,${loaded ? 0 : 28}px,0)`,
-          transition: "all 1.3s cubic-bezier(.25,.1,.25,1) .8s",
+        <div className={loaded ? "anim-fade-up anim-d3" : "anim-hidden"} style={{
+          fontSize: "clamp(20px,3vw,34px)", fontWeight: 700,
+          letterSpacing: "-.03em", lineHeight: 1.3, fontFamily: FONT, marginTop: 24,
+          color: "rgba(245,245,247,.55)",
         }}>
-          <span style={{
-            background: "linear-gradient(90deg,#f7c948,#e8a030,#d06828,#a855f7,#6d5bf7,#2997ff)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          }}>같이 듣고, 같이 느끼고, 같이 깔리자.</span>
+          한농대 유일 힙합 동아리.
         </div>
 
-        <div style={{
-          marginTop: 48, opacity: loaded ? 1 : 0,
-          transform: `translate3d(0,${loaded ? 0 : 20}px,0)`,
-          transition: "all 1.2s cubic-bezier(.25,.1,.25,1) 1.1s",
-        }}>
+        <div className={loaded ? "anim-fade-up anim-d4" : "anim-hidden"} style={{ marginTop: 48 }}>
           <span onClick={() => scrollTo("about")}
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
@@ -142,11 +137,11 @@ function HeroSection() {
 function AboutSection() {
   return (
     <section id="about" style={{
-      background: "#000", padding: "160px max(24px,10vw) 120px",
+      background: "#000", padding: "100px max(24px,10vw) 120px",
     }}>
       <div style={{ maxWidth: 980, margin: "0 auto" }}>
         <FadeIn y={44} duration={1.3}>
-          <h2 style={{
+          <h2 className="text-reveal" style={{
             fontSize: "clamp(52px,9vw,108px)", fontWeight: 900,
             lineHeight: 1.06, letterSpacing: "-.05em", fontFamily: FONT, color: "#f5f5f7",
           }}>일단 핵심부터.</h2>
@@ -205,7 +200,7 @@ function HowSection() {
     }}>
       <div style={{ maxWidth: 980, margin: "0 auto" }}>
         <FadeIn y={44} duration={1.3}>
-          <h2 style={{
+          <h2 className="text-reveal" style={{
             fontSize: "clamp(48px,8vw,96px)", fontWeight: 900,
             lineHeight: 1.06, letterSpacing: "-.05em", fontFamily: FONT, color: "#f5f5f7",
           }}>이렇게 진행돼요.</h2>
@@ -321,7 +316,7 @@ function SpeakerSection() {
           </div>
         </div>
 
-        <h3 style={{
+        <h3 className="text-reveal" style={{
           fontSize: "clamp(34px,6vw,72px)", fontWeight: 900,
           letterSpacing: "-.05em", lineHeight: 1.12, fontFamily: FONT, marginBottom: 16,
         }}>
@@ -368,7 +363,7 @@ function JoinSection() {
         </FadeIn>
 
         <FadeIn delay={0.12} y={50} duration={1.4}>
-          <h2 style={{
+          <h2 className="text-reveal" style={{
             fontSize: "clamp(52px,10vw,120px)", fontWeight: 900,
             lineHeight: 1.02, letterSpacing: "-.06em", fontFamily: FONT, marginBottom: 32,
           }}>
@@ -419,6 +414,7 @@ function JoinSection() {
 /* ══════════ CONTACT ══════════ */
 function ContactSection() {
   const [kakaoHover, setKakaoHover] = useState(false);
+  const [instaHover, setInstaHover] = useState(false);
 
   return (
     <section id="contact" style={{
@@ -426,7 +422,7 @@ function ContactSection() {
     }}>
       <div style={{ maxWidth: 980, margin: "0 auto" }}>
         <FadeIn y={44} duration={1.3}>
-          <h2 style={{
+          <h2 className="text-reveal" style={{
             fontSize: "clamp(48px,8vw,96px)", fontWeight: 900,
             lineHeight: 1.06, letterSpacing: "-.05em", fontFamily: FONT, color: "#f5f5f7",
           }}>문의.</h2>
@@ -439,9 +435,10 @@ function ContactSection() {
         <FadeIn delay={0.25} y={36} duration={1.2}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px,100%),1fr))",
-            gap: 24,
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px,100%),1fr))",
+            gap: 20,
           }}>
+            {/* Contact info */}
             <div style={{
               background: "rgba(255,255,255,.04)", borderRadius: 20,
               padding: "clamp(28px,4vw,40px)", border: "1px solid rgba(255,255,255,.06)",
@@ -459,6 +456,7 @@ function ContactSection() {
               </div>
             </div>
 
+            {/* KakaoTalk */}
             <div style={{
               background: "rgba(255,255,255,.04)", borderRadius: 20,
               padding: "clamp(28px,4vw,40px)", border: "1px solid rgba(255,255,255,.06)",
@@ -489,6 +487,42 @@ function ContactSection() {
                   <path d="M12 3C6.48 3 2 6.58 2 10.9c0 2.78 1.86 5.22 4.66 6.62-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.23.11.07.24.02.24.02.31-.04 3.65-2.4 4.22-2.81.58.08 1.17.12 1.78.12 5.52 0 10-3.58 10-7.99C22 6.58 17.52 3 12 3z"/>
                 </svg>
                 오픈 카카오톡 문의하기
+              </a>
+            </div>
+
+            {/* Instagram */}
+            <div style={{
+              background: "rgba(255,255,255,.04)", borderRadius: 20,
+              padding: "clamp(28px,4vw,40px)", border: "1px solid rgba(255,255,255,.06)",
+              display: "flex", flexDirection: "column", justifyContent: "space-between",
+            }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(245,245,247,.3)", letterSpacing: ".06em", fontFamily: FONT_EN, marginBottom: 24 }}>INSTAGRAM</div>
+                <p style={{ fontSize: "clamp(16px,1.8vw,19px)", fontWeight: 500, color: "rgba(245,245,247,.6)", fontFamily: FONT, lineHeight: 1.5, marginBottom: 8 }}>
+                  깔의 소식을 가장 먼저 만나보세요.
+                </p>
+                <p style={{ fontSize: 14, color: "rgba(245,245,247,.3)", fontFamily: FONT, lineHeight: 1.5 }}>
+                  @knuaf_kkal
+                </p>
+              </div>
+              <a href="https://www.instagram.com/knuaf_kkal" target="_blank" rel="noopener noreferrer"
+                onMouseEnter={() => setInstaHover(true)} onMouseLeave={() => setInstaHover(false)}
+                style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
+                  background: instaHover
+                    ? "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)"
+                    : "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)",
+                  color: "#fff", borderRadius: 14, padding: "16px 24px",
+                  fontSize: 16, fontWeight: 700, textDecoration: "none",
+                  transform: instaHover ? "scale(1.02)" : "scale(1)",
+                  boxShadow: instaHover ? "0 4px 24px rgba(225,48,108,.3)" : "0 2px 8px rgba(225,48,108,.15)",
+                  transition: "all .45s cubic-bezier(.25,.1,.25,1)",
+                  fontFamily: FONT, marginTop: 28,
+                }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+                인스타그램 팔로우하기
               </a>
             </div>
           </div>
@@ -543,11 +577,44 @@ export default function App() {
         body{background:#000;overflow-x:hidden;-webkit-overflow-scrolling:touch}
         ::selection{background:rgba(41,151,255,.3);color:#fff}
 
+        /* ── Text animation classes ── */
+        .anim-hidden {
+          opacity: 0;
+          transform: translate3d(0, 28px, 0);
+        }
+        .anim-fade-up {
+          animation: fadeUp 1.3s cubic-bezier(.25,.1,.25,1) forwards;
+        }
+        .anim-d1 { animation-delay: .2s; opacity: 0; }
+        .anim-d2 { animation-delay: .45s; opacity: 0; }
+        .anim-d3 { animation-delay: .75s; opacity: 0; }
+        .anim-d4 { animation-delay: 1.05s; opacity: 0; }
+
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translate3d(0, 28px, 0);
+          }
+          to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
+        }
+
+        /* ── Section heading float ── */
+        .text-reveal {
+          animation: headingFloat 4s ease-in-out infinite;
+        }
+        @keyframes headingFloat {
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(0, -14px, 0) scale(1.01); }
+        }
+
         /* Desktop: blur orbs */
         @media(min-width:769px){
           .hero-orb{filter:blur(80px)}
         }
-        /* Mobile: no blur, just soft opacity */
+        /* Mobile: no blur */
         @media(max-width:768px){
           .hero-orb{filter:none;opacity:.7}
           section{padding-left:20px!important;padding-right:20px!important}
