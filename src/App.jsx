@@ -113,9 +113,10 @@ function HeroSection() {
         }}>깔</div>
 
         <div className={loaded ? "anim-fade-up anim-d3" : "anim-hidden"} style={{
-          fontSize: "clamp(20px,3vw,34px)", fontWeight: 700,
+          fontSize: "clamp(20px,3vw,34px)", fontWeight: 800,
           letterSpacing: "-.03em", lineHeight: 1.3, fontFamily: FONT, marginTop: 24,
-          color: "rgba(245,245,247,.55)",
+          background: "linear-gradient(90deg,#f7c948,#e8a030,#d06828,#a855f7,#6d5bf7,#2997ff)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
         }}>
           한농대 유일 힙합 동아리.
         </div>
