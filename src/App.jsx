@@ -52,7 +52,7 @@ function Nav({ scrolled }) {
       <div onClick={() => scrollTo("hero")}
         style={{ fontWeight: 800, fontSize: 17, color: "#f5f5f7", cursor: "pointer", letterSpacing: "-.03em" }}>깔</div>
       <div style={{ display: "flex", gap: 32, fontSize: 12.5, fontWeight: 500, color: "rgba(245,245,247,.8)" }}>
-        {[["소개","about"],["활동","how"],["지원","join"],["문의","contact"]].map(([l,id]) => (
+        {[["소개","about"],["활동","how"],["혜택","perks"],["지원","join"],["문의","contact"]].map(([l,id]) => (
           <span key={id} onClick={() => scrollTo(id)}
             style={{ cursor: "pointer", transition: "color .3s" }}
             onMouseEnter={e => e.target.style.color = "#f5f5f7"}
@@ -343,6 +343,190 @@ function SpeakerSection() {
   );
 }
 
+/* ══════════ PERKS ══════════ */
+function PerksSection() {
+  const perks = [
+    {
+      emoji: "🍿",
+      title: "간식 · 음료\n무한 제공",
+      desc: "모임마다 먹을 거 걱정은 없습니다.\n음악에만 집중하세요.",
+      accent: "#f7c948",
+    },
+    {
+      emoji: "🎪",
+      title: "학기별\n특별 활동",
+      desc: "힙플페 같은 힙합 페스티벌,\n같이 가요.",
+      accent: "#e07828",
+    },
+    {
+      emoji: "🎁",
+      title: "동아리\n전용 굿즈",
+      desc: "스티커, 키링 등\n깔 멤버만의 소장품.",
+      accent: "#a855f7",
+    },
+    {
+      emoji: "📸",
+      title: "이번 주\nOO의 픽",
+      desc: "멤버별 선곡 프로필을\n인스타에 소개합니다.",
+      accent: "#2997ff",
+    },
+  ];
+
+  return (
+    <section id="perks" style={{
+      background: "#000", padding: "120px max(24px,10vw) 140px",
+      overflow: "hidden",
+    }}>
+      <div style={{ maxWidth: 980, margin: "0 auto" }}>
+        <FadeIn y={44} duration={1.3}>
+          <h2 className="text-reveal" style={{
+            fontSize: "clamp(48px,8vw,96px)", fontWeight: 900,
+            lineHeight: 1.06, letterSpacing: "-.05em", fontFamily: FONT, color: "#f5f5f7",
+          }}>멤버 혜택.</h2>
+        </FadeIn>
+
+        <FadeIn delay={0.12} y={20} duration={1}>
+          <p style={{
+            fontSize: "clamp(16px,1.8vw,20px)", fontWeight: 500,
+            color: "rgba(245,245,247,.45)", fontFamily: FONT,
+            marginTop: 20, marginBottom: 56, letterSpacing: "-.01em",
+          }}>깔에 들어오면 이런 것들이 기다리고 있어요.</p>
+        </FadeIn>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(220px,100%),1fr))",
+          gap: 16,
+          alignItems: "stretch",
+        }}>
+          {perks.map((perk, i) => (
+            <FadeIn key={i} delay={0.15 + i * 0.1} y={36} duration={1.1} style={{ height: "100%" }}>
+              <PerkCard perk={perk} />
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PerkCard({ perk }) {
+  const [hovered, setHovered] = useState(false);
+  const [particles, setParticles] = useState([]);
+  const idCounter = useRef(0);
+
+  const spawnParticles = () => {
+    const newParticles = Array.from({ length: 12 }, () => {
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 60 + Math.random() * 80;
+      const size = 16 + Math.random() * 18;
+      return {
+        id: idCounter.current++,
+        x: Math.cos(angle) * distance,
+        y: Math.sin(angle) * distance,
+        rotation: Math.random() * 360 - 180,
+        size,
+        delay: Math.random() * 0.15,
+      };
+    });
+    setParticles(newParticles);
+    setTimeout(() => setParticles([]), 900);
+  };
+
+  return (
+    <div
+      onMouseEnter={() => { setHovered(true); spawnParticles(); }}
+      onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => { setHovered(true); spawnParticles(); }}
+      style={{
+        background: hovered
+          ? `linear-gradient(165deg, ${perk.accent}12 0%, rgba(255,255,255,.06) 40%, rgba(255,255,255,.03) 100%)`
+          : "rgba(255,255,255,.03)",
+        borderRadius: 24,
+        padding: "clamp(32px,4vw,44px) clamp(24px,3vw,32px)",
+        border: `1px solid ${hovered ? perk.accent + '30' : 'rgba(255,255,255,.06)'}`,
+        cursor: "default",
+        transition: "all .5s cubic-bezier(.25,.1,.25,1)",
+        transform: hovered ? "translateY(-6px)" : "translateY(0)",
+        position: "relative",
+        overflow: "visible",
+        height: "100%",
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Accent glow */}
+      <div style={{
+        position: "absolute", top: -30, right: -30,
+        width: 120, height: 120, borderRadius: "50%",
+        background: `radial-gradient(circle, ${perk.accent}${hovered ? '18' : '08'} 0%, transparent 70%)`,
+        transition: "background .5s ease",
+        pointerEvents: "none",
+      }} />
+
+      {/* Emoji with particle burst */}
+      <div style={{ position: "relative", width: "fit-content", marginBottom: 24 }}>
+        {/* Main emoji */}
+        <div style={{
+          fontSize: 48,
+          transform: hovered ? "scale(1.15) rotate(-4deg)" : "scale(1) rotate(0deg)",
+          transition: "transform .5s cubic-bezier(.25,.1,.25,1)",
+          display: "inline-block",
+          position: "relative", zIndex: 2,
+        }}>
+          {perk.emoji}
+        </div>
+
+        {/* Particles */}
+        {particles.map((p) => (
+          <span key={p.id} style={{
+            position: "absolute",
+            left: 20, top: 20,
+            fontSize: p.size,
+            pointerEvents: "none",
+            zIndex: 1,
+            animation: `emojiBurst .75s cubic-bezier(.25,.1,.25,1) ${p.delay}s forwards`,
+            opacity: 0,
+            ['--tx']: `${p.x}px`,
+            ['--ty']: `${p.y}px`,
+            ['--rot']: `${p.rotation}deg`,
+          }}>
+            {perk.emoji}
+          </span>
+        ))}
+      </div>
+
+      {/* Title */}
+      <h3 style={{
+        fontSize: "clamp(22px,2.8vw,28px)", fontWeight: 800,
+        color: "#f5f5f7", letterSpacing: "-.03em",
+        lineHeight: 1.25, fontFamily: FONT,
+        marginBottom: 14, whiteSpace: "pre-line",
+      }}>
+        {perk.title}
+      </h3>
+
+      {/* Description */}
+      <p style={{
+        fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.6,
+        color: "rgba(245,245,247,.45)", fontFamily: FONT,
+        whiteSpace: "pre-line", marginTop: "auto",
+      }}>
+        {perk.desc}
+      </p>
+
+      {/* Bottom accent line */}
+      <div style={{
+        position: "absolute", bottom: 0, left: "10%", right: "10%",
+        height: 2, borderRadius: 1,
+        background: `linear-gradient(90deg, transparent, ${perk.accent}${hovered ? '50' : '00'}, transparent)`,
+        transition: "background .5s ease",
+      }} />
+    </div>
+  );
+}
+
 /* ══════════ JOIN ══════════ */
 function JoinSection() {
   const [btnHover, setBtnHover] = useState(false);
@@ -414,8 +598,8 @@ function JoinSection() {
 
 /* ══════════ CONTACT ══════════ */
 function ContactSection() {
-  const [kakaoHover, setKakaoHover] = useState(false);
-  const [instaHover, setInstaHover] = useState(false);
+  const [dmHover, setDmHover] = useState(false);
+  const [followHover, setFollowHover] = useState(false);
 
   return (
     <section id="contact" style={{
@@ -433,11 +617,11 @@ function ContactSection() {
           <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,.08)", margin: "56px 0" }} />
         </FadeIn>
 
-        <FadeIn delay={0.25} y={36} duration={1.2}>
+        <FadeIn delay={0.2} y={36} duration={1.2}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px,100%),1fr))",
-            gap: 20,
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px,100%),1fr))",
+            gap: 24,
           }}>
             {/* Contact info */}
             <div style={{
@@ -457,74 +641,96 @@ function ContactSection() {
               </div>
             </div>
 
-            {/* KakaoTalk */}
+            {/* Instagram DM card */}
             <div style={{
               background: "rgba(255,255,255,.04)", borderRadius: 20,
-              padding: "clamp(28px,4vw,40px)", border: "1px solid rgba(255,255,255,.06)",
+              padding: "clamp(28px,4vw,40px)",
+              border: "1px solid rgba(255,255,255,.06)",
               display: "flex", flexDirection: "column", justifyContent: "space-between",
+              position: "relative", overflow: "hidden",
             }}>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(245,245,247,.3)", letterSpacing: ".06em", fontFamily: FONT_EN, marginBottom: 24 }}>KAKAOTALK</div>
-                <p style={{ fontSize: "clamp(16px,1.8vw,19px)", fontWeight: 500, color: "rgba(245,245,247,.6)", fontFamily: FONT, lineHeight: 1.5, marginBottom: 8 }}>
-                  오픈 카카오톡으로 편하게 문의하세요.
-                </p>
-                <p style={{ fontSize: 14, color: "rgba(245,245,247,.3)", fontFamily: FONT, lineHeight: 1.5 }}>
-                  답변이 늦을 경우 전화로 연락해 주세요.
-                </p>
-              </div>
-              <a href="https://open.kakao.com/o/sN3edXki" target="_blank" rel="noopener noreferrer"
-                onMouseEnter={() => setKakaoHover(true)} onMouseLeave={() => setKakaoHover(false)}
-                style={{
-                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
-                  background: kakaoHover ? "#FFE300" : "#FEE500",
-                  color: "#191919", borderRadius: 14, padding: "16px 24px",
-                  fontSize: 16, fontWeight: 700, textDecoration: "none",
-                  transform: kakaoHover ? "scale(1.02)" : "scale(1)",
-                  boxShadow: kakaoHover ? "0 4px 24px rgba(254,229,0,.25)" : "0 2px 8px rgba(254,229,0,.1)",
-                  transition: "all .45s cubic-bezier(.25,.1,.25,1)",
-                  fontFamily: FONT, marginTop: 28,
-                }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#191919">
-                  <path d="M12 3C6.48 3 2 6.58 2 10.9c0 2.78 1.86 5.22 4.66 6.62-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.23.11.07.24.02.24.02.31-.04 3.65-2.4 4.22-2.81.58.08 1.17.12 1.78.12 5.52 0 10-3.58 10-7.99C22 6.58 17.52 3 12 3z"/>
-                </svg>
-                오픈 카카오톡 문의하기
-              </a>
-            </div>
+              {/* Insta gradient glow top-right */}
+              <div style={{
+                position: "absolute", top: -40, right: -40,
+                width: 180, height: 180, borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(225,48,108,.08) 0%, transparent 70%)",
+                pointerEvents: "none",
+              }} />
 
-            {/* Instagram */}
-            <div style={{
-              background: "rgba(255,255,255,.04)", borderRadius: 20,
-              padding: "clamp(28px,4vw,40px)", border: "1px solid rgba(255,255,255,.06)",
-              display: "flex", flexDirection: "column", justifyContent: "space-between",
-            }}>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(245,245,247,.3)", letterSpacing: ".06em", fontFamily: FONT_EN, marginBottom: 24 }}>INSTAGRAM</div>
-                <p style={{ fontSize: "clamp(16px,1.8vw,19px)", fontWeight: 500, color: "rgba(245,245,247,.6)", fontFamily: FONT, lineHeight: 1.5, marginBottom: 8 }}>
-                  깔의 소식을 가장 먼저 만나보세요.
+              <div style={{ position: "relative" }}>
+                {/* Header with icon */}
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 12, marginBottom: 24,
+                }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 12,
+                    background: "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: "#f5f5f7", fontFamily: FONT }}>@knuaf_kkal</div>
+                    <div style={{ fontSize: 13, color: "rgba(245,245,247,.4)", fontFamily: FONT }}>KNUAF HIP-HOP CLUB</div>
+                  </div>
+                </div>
+
+                <p style={{
+                  fontSize: "clamp(17px,2vw,20px)", fontWeight: 600,
+                  color: "#f5f5f7", fontFamily: FONT, lineHeight: 1.4,
+                  marginBottom: 10,
+                }}>
+                  궁금한 건 DM으로 편하게 물어보세요.
                 </p>
-                <p style={{ fontSize: 14, color: "rgba(245,245,247,.3)", fontFamily: FONT, lineHeight: 1.5 }}>
-                  @knuaf_kkal
+                <p style={{
+                  fontSize: 14, color: "rgba(245,245,247,.35)", fontFamily: FONT, lineHeight: 1.5,
+                }}>
+                  동아리 소식, 멤버 선곡 프로필도 인스타에서 확인할 수 있어요.
                 </p>
               </div>
-              <a href="https://www.instagram.com/knuaf_kkal" target="_blank" rel="noopener noreferrer"
-                onMouseEnter={() => setInstaHover(true)} onMouseLeave={() => setInstaHover(false)}
-                style={{
-                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
-                  background: instaHover
-                    ? "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)"
-                    : "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)",
-                  color: "#fff", borderRadius: 14, padding: "16px 24px",
-                  fontSize: 16, fontWeight: 700, textDecoration: "none",
-                  transform: instaHover ? "scale(1.02)" : "scale(1)",
-                  boxShadow: instaHover ? "0 4px 24px rgba(225,48,108,.3)" : "0 2px 8px rgba(225,48,108,.15)",
-                  transition: "all .45s cubic-bezier(.25,.1,.25,1)",
-                  fontFamily: FONT, marginTop: 28,
-                }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-                </svg>
-                인스타그램 팔로우하기
-              </a>
+
+              {/* Buttons */}
+              <div style={{ display: "flex", gap: 10, marginTop: 28, flexWrap: "wrap" }}>
+                <a href="https://www.instagram.com/knuaf_kkal" target="_blank" rel="noopener noreferrer"
+                  onMouseEnter={() => setDmHover(true)} onMouseLeave={() => setDmHover(false)}
+                  style={{
+                    flex: 1, minWidth: 140,
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    background: dmHover
+                      ? "linear-gradient(135deg, #9B3FC1 0%, #D1358A 30%, #E8367A 50%, #F88040 70%, #FCBA50 100%)"
+                      : "linear-gradient(135deg, #833AB4 0%, #C13584 30%, #E1306C 50%, #F77737 70%, #FCAF45 100%)",
+                    color: "#fff", borderRadius: 14, padding: "15px 20px",
+                    fontSize: 15, fontWeight: 700, textDecoration: "none",
+                    transform: dmHover ? "scale(1.02)" : "scale(1)",
+                    boxShadow: dmHover ? "0 4px 28px rgba(225,48,108,.35)" : "0 2px 10px rgba(225,48,108,.15)",
+                    transition: "all .45s cubic-bezier(.25,.1,.25,1)",
+                    fontFamily: FONT,
+                  }}>
+                  {/* DM icon */}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                  </svg>
+                  DM 보내기
+                </a>
+                <a href="https://www.instagram.com/knuaf_kkal" target="_blank" rel="noopener noreferrer"
+                  onMouseEnter={() => setFollowHover(true)} onMouseLeave={() => setFollowHover(false)}
+                  style={{
+                    flex: 1, minWidth: 140,
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    background: followHover ? "rgba(255,255,255,.15)" : "rgba(255,255,255,.08)",
+                    color: "#f5f5f7", borderRadius: 14, padding: "15px 20px",
+                    fontSize: 15, fontWeight: 600, textDecoration: "none",
+                    border: "1px solid rgba(255,255,255,.12)",
+                    transform: followHover ? "scale(1.02)" : "scale(1)",
+                    transition: "all .45s cubic-bezier(.25,.1,.25,1)",
+                    fontFamily: FONT,
+                  }}>
+                  팔로우하기
+                </a>
+              </div>
             </div>
           </div>
         </FadeIn>
@@ -611,6 +817,20 @@ export default function App() {
           50% { transform: translate3d(0, -14px, 0) scale(1.01); }
         }
 
+        @keyframes emojiBurst {
+          0% {
+            transform: translate3d(0, 0, 0) scale(0.3) rotate(0deg);
+            opacity: 1;
+          }
+          60% {
+            opacity: 1;
+          }
+          100% {
+            transform: translate3d(var(--tx), var(--ty), 0) scale(1) rotate(var(--rot));
+            opacity: 0;
+          }
+        }
+
         /* Desktop: blur orbs */
         @media(min-width:769px){
           .hero-orb{filter:blur(80px)}
@@ -626,6 +846,7 @@ export default function App() {
       <AboutSection />
       <HowSection />
       <SpeakerSection />
+      <PerksSection />
       <JoinSection />
       <ContactSection />
       <Footer />
